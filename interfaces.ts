@@ -7,6 +7,7 @@ export interface Guitar {
     releaseDate: string,
     image: string,
     guitarType: string,
+    materials: string[],
     series: Series
 }
 
