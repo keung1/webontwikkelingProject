@@ -16,23 +16,23 @@ async function viewData() {
     let guitar: Guitar[] = await getData(guitarUrl);
     for (let i: number = 0; i < 10; i++) {
         console.log(`- ${guitar[i].name} (${guitar[i].id})`);
-        console.log(`   - Description: ${guitar[i].description}`);
-        console.log(`   - Price: ${guitar[i].price}`);
+        console.log(`   - Beschrijving: ${guitar[i].description}`);
+        console.log(`   - Prijs: ${guitar[i].price}`);
         console.log(`   - Cutaway: ${guitar[i].cutaway}`);
-        console.log(`   - Releasedate: ${guitar[i].releaseDate}`);
-        console.log(`   - Image URL: ${guitar[i].image}`);
-        console.log(`   - Guitar type: ${guitar[i].guitarType}`);
+        console.log(`   - Publicatie: ${guitar[i].releaseDate}`);
+        console.log(`   - Foto URL: ${guitar[i].image}`);
+        console.log(`   - Gitaar type: ${guitar[i].guitarType}`);
         let result: string = ""
         for(let material of guitar[i].materials) {
             result = result + material;          
         }
-        console.log(`   - materials: ${result}`);
+        console.log(`   - Materialen: ${result}`);
         for (let j: number = 0; j < 6; j++) {
             if (String(guitar[i].series) === series[j].id) {
                 console.log(`   - Series: ${series[j].name}`);
                 console.log(`       - Stock: ${series[j].amount}`);
-                console.log(`       - First appearance: ${series[j].firstAppearance}`);
-                console.log(`       - Creator: ${series[j].creator}\n`);
+                console.log(`       - Eerst verschijning: ${series[j].firstAppearance}`);
+                console.log(`       - Luthier: ${series[j].creator}\n`);
             }
         }
     }
@@ -45,23 +45,23 @@ async function filterData(id: string) {
     for (let i: number = 0; i < 10; i++) {
         if (guitar[i].id === id) {
             console.log(`- ${guitar[i].name} (${guitar[i].id})`);
-            console.log(`   - Description: ${guitar[i].description}`);
-            console.log(`   - Price: ${guitar[i].price}`);
+            console.log(`   - Beschrijving: ${guitar[i].description}`);
+            console.log(`   - Prijs: ${guitar[i].price}`);
             console.log(`   - Cutaway: ${guitar[i].cutaway}`);
-            console.log(`   - Releasedate: ${guitar[i].releaseDate}`);
-            console.log(`   - Image URL: ${guitar[i].image}`);
-            console.log(`   - Guitar type: ${guitar[i].guitarType}`);
+            console.log(`   - Publicatie: ${guitar[i].releaseDate}`);
+            console.log(`   - Foto URL: ${guitar[i].image}`);
+            console.log(`   - Gitaar type: ${guitar[i].guitarType}`);
             let result: string = ""
             for(let material of guitar[i].materials) {
                 result = result + material;          
             }
-            console.log(`   - Materials: ${result.split(" ").join(", ")}`);
+            console.log(`   - Materialen: ${result.split(" ").join(", ")}`);
             for (let j: number = 0; j < 6; j++) {
                 if (String(guitar[i].series) === series[j].id) {
                     console.log(`   - Series: ${series[j].name}`);
                     console.log(`       - Stock: ${series[j].amount}`);
-                    console.log(`       - First appearance: ${series[j].firstAppearance}`);
-                    console.log(`       - Creator: ${series[j].creator}\n`);
+                    console.log(`       - Eerste verschijning: ${series[j].firstAppearance}`);
+                    console.log(`       - Luthier: ${series[j].creator}\n`);
                 }
             }
             found = true;
