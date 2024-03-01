@@ -10,9 +10,10 @@ async function getData(url: string) {
     return await response.json();
 }
 
+
 async function viewData() {
-    let guitar: Guitar[] = await getData(guitarUrl);
     let series: Series[] = await getData(seriesUrl);
+    let guitar: Guitar[] = await getData(guitarUrl);
     for (let i: number = 0; i < 10; i++) {
         console.log(`- ${guitar[i].name} (${guitar[i].id})`);
         console.log(`   - Description: ${guitar[i].description}`);
@@ -26,8 +27,8 @@ async function viewData() {
             result = result + material;          
         }
         console.log(`   - materials: ${result}`);
-        for (let j: number = 0; i < 6; i++) {
-            if (String(guitar[i].series) == series[j].id) {
+        for (let j: number = 0; j < 6; j++) {
+            if (String(guitar[i].series) === series[j].id) {
                 console.log(`   - Series: ${series[j].name}`);
                 console.log(`       - Stock: ${series[j].amount}`);
                 console.log(`       - First appearance: ${series[j].firstAppearance}`);
@@ -38,10 +39,9 @@ async function viewData() {
 }
 
 async function filterData(id: string) {
+    let found: boolean = false
     let guitar: Guitar[] = await getData(guitarUrl);
     let series: Series[] = await getData(seriesUrl);
-    console.log(guitar);
-    console.log(series);
     for (let i: number = 0; i < 10; i++) {
         if (guitar[i].id === id) {
             console.log(`- ${guitar[i].name} (${guitar[i].id})`);
@@ -56,7 +56,7 @@ async function filterData(id: string) {
                 result = result + material;          
             }
             console.log(`   - Materials: ${result.split(" ").join(", ")}`);
-            for (let j: number = 0; i < 6; i++) {
+            for (let j: number = 0; j < 6; j++) {
                 if (String(guitar[i].series) === series[j].id) {
                     console.log(`   - Series: ${series[j].name}`);
                     console.log(`       - Stock: ${series[j].amount}`);
@@ -64,7 +64,11 @@ async function filterData(id: string) {
                     console.log(`       - Creator: ${series[j].creator}\n`);
                 }
             }
+            found = true;
         }
+    }
+    if (found === false) {
+        console.log("Deze id bestaat niet.")
     }
 }
 
@@ -82,7 +86,7 @@ async function main() {
         else if (option === 2) {
             let filterChoice: string = readline.question("Welke ID wil je filteren: ");
                 await filterData(filterChoice);
-        }2
+        }
     }
 }
 
