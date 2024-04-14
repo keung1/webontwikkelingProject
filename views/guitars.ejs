@@ -1,0 +1,43 @@
+<%- include("header") %>
+
+<main>
+    <h1>Gitaren</h1>
+    <form action = "/" method = "get">
+        <label for = "search"></label>
+        <input type = "text" id = "search" name = "q" value = "<%= q%>">
+        <button type = "submit">Search</button>
+    </form>
+    <table>
+        <tr>
+            <% for (let field of sortFields) { %>
+                <% if (field.text == "Materiaal") { %>
+                    <th><%= field.text %></th>
+                <% } %>
+                <% if (field.text != "Materiaal") { %>
+                    <th>
+                        <a href="?sortField=<%= field.value %>&sortDirection=<%= field.value === sortField ? sortDirection === 'asc' ? 'desc' : 'asc' : 'asc' %>">
+                            <%= field.text %>
+                            <% if (field.value === sortField) { %>
+                                <%- sortDirection === 'asc' ? '▲' : '▼' %>
+                            <% } %>
+                        </a>
+                    </th>
+                <% } %>
+            <% } %>
+        </tr>
+        <% for (let guitar of guitars) { %>
+        <tr>
+            <td><a href = "/:<%= guitar.name %>"><%- guitar.name %></a></td>
+            <td><%- guitar.price %></td>
+            <td><%- guitar.materials %></td>
+            <td><%- guitar.guitarType %></td>
+            <% if (String(guitar.cutaway) == "true") { %>
+                <td>ja</td>
+            <% } %>
+            <% if (String(guitar.cutaway) == "false") { %>
+                <td>neen</td>
+            <% } %>
+        </tr>
+        <% } %>
+    </table>
+</main>

@@ -1,0 +1,24 @@
+<%- include("header") %>
+
+<main class = "detail_main">
+    <% for (let guitar of guitars) { %>
+    <div id = "guitar_container">
+        <h2><%- guitar.name %></h2>
+        <figure>
+            <img class = "guitarImage" src = "<%= guitar.image %>" width= "750" height= "1331">
+        </figure>
+        <section class = "guitar_details">
+            <ul>
+                <li><span class = "detail">Beschrijving:</span><br><br>
+                    <%- guitar.description %></li>
+                <li><span class = "detail">Prijs:</span> <%- guitar.price %></li>
+                <li><span class = "detail">Eerste publicatie:</span> <%- guitar.releaseDate %></li>
+                <li><span class = "detail">Type:</span> <%- guitar.guitarType %></li>
+                <li><span class = "detail">Materialen:</span> <%- guitar.materials %></li>
+                <li><span class = "detail">Cutaway:</span> <%- guitar.cutaway %></li>
+                <li><span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- guitar.series %></a></li>
+            </ul>
+        </section>
+    </div>
+    <% } %>
+</main>

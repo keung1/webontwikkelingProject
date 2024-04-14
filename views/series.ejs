@@ -1,0 +1,27 @@
+<%- include("header") %>
+
+<main>
+    <h1>Series</h1>
+    <table>
+        <tr>
+            <% for (let field of sortFields) { %>
+                <th>
+                    <a href="?sortField=<%= field.value %>&sortDirection=<%= field.value === sortField ? sortDirection === 'asc' ? 'desc' : 'asc' : 'asc' %>">
+                        <%= field.text %>
+                        <% if (field.value === sortField) { %>
+                            <%- sortDirection === 'asc' ? '▲' : '▼' %>
+                        <% } %>
+                    </a>
+                </th>
+            <% } %>
+        </tr>
+        <% for (let serie of series) { %>
+        <tr>
+            <td><a href = "/series/:<%= serie.name %>"><%- serie.name %></a></td>
+            <td><%- serie.amount %></td>
+            <td><%- serie.firstAppearance %></td>
+            <td><%- serie.creator %></td>
+        </tr>
+        <% } %>
+    </table>
+</main>

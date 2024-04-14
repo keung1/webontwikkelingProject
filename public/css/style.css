@@ -1,0 +1,155 @@
+a {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+/*------------------ grid ------------------*/ 
+body {
+    overflow-x: hidden;
+    display: grid;
+    grid-template-areas:
+    'header' 'header' 'header'
+    'main' 'main' 'main'
+    'footer' 'footer' 'footer';
+    background-color: #1d1d1f;
+    color: #FFFFFF;
+}
+
+header {
+    grid-area: header;
+}
+main {
+    grid-area: main;
+}
+footer {
+    grid-area: footer;
+}
+
+/*------------------ header ------------------*/ 
+
+header {
+    background-color: #B51C42;
+}
+
+header ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 1.5rem
+}
+
+header ul li {
+    padding-right: 1rem;
+}
+
+/*------------------ main ------------------*/ 
+
+main {
+    padding: 1rem;
+}
+
+main h1{
+    text-align: start;
+    font-size: xx-large;
+    padding-bottom: 1rem;
+}
+
+table {
+    margin-top: 1rem;
+    width: 90%;
+    border: 1px solid #FCDC97;
+}
+
+table tr, td, th {
+    border: 1px solid #FCDC97;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+th {
+    font-size: large;
+    font-weight: bold;
+    text-align: start;
+}
+
+table ul {
+    list-style-type: circle;
+    padding-left: 1rem;
+}
+
+/*------------------ guitarDetail ------------------*/ 
+.detail_main {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.detail_main h2 {
+    text-align: center;
+    font-size: xx-large;
+    padding: 1.5rem;
+}
+
+#guitar_container {
+    display: flex;
+    flex-direction: row;
+    width: 45rem;
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.guitarImage{
+    width: 20rem;
+    height: auto;
+}
+
+
+.guitar_details ul {
+    padding: 1rem;
+}
+
+.guitar_details ul li {
+    padding-bottom: 1.5rem;
+}
+
+/*------------------ seriesDetail ------------------*/ 
+.series_main {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.series_main h2{
+    text-align: center;
+    font-size: xx-large;
+    padding: 1.5rem;
+}
+
+#series_container {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    background-color: #3a3a3a;
+    border-radius: 10px
+}
+
+.seriesImage {
+    width: 30rem;
+    height: auto;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.details ul {
+    padding: 1rem;
+}
+
+.details ul li {
+    padding-bottom: 0.3rem;
+}
+
+.detail {
+    font-size: large;
+}

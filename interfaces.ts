@@ -16,5 +16,6 @@ export interface Series {
     name: string,
     amount: number,
     firstAppearance: number,
-    creator: string
+    creator: string,
+    image: string
 }
