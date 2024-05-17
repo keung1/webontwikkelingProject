@@ -1,12 +1,15 @@
 import {Guitar, Series} from "./interfaces";
 import express, { Express } from "express";
 import ejs from "ejs";
+import { connect, getGuitars, getSeries, editPrice, editCutaway, editPublication, editType } from "./database";
+import dontenv from "dotenv"
 
 const app : Express = express();
 
 app.set("view engine", "ejs");
-app.set("port", 3000);
+app.set("port", process.env.PORT || 3000);
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
 let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
 let seriesUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitarSeries.json';
@@ -20,7 +23,6 @@ let guitar: Guitar[] = [];
 let series: Series[] = [];
 
 app.get("/", (req, res) => {
-
     const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
     const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
     let sortedGuitars = [...guitar].sort((a, b) => {
@@ -119,14 +121,48 @@ app.get("/:guitarDetail", (req, res) => {
     const guitarDetail = guitar.filter((guitar) => {
         return ":" + guitar.name === detail;
     });
+
     res.render("guitarDetails", { guitars: guitarDetail});
 });
 
+app.post("/:guitarDetail", async (req, res) => {
+    const name: string = req.body.name;
+    const price: string = req.body.price;
+    const date: string = req.body.publication;
+    const type: string = req.body.type;
+    const cutaway: string = req.body.cutaway;
+    if (price != undefined) {
+        await editPrice(name, price);
+    }
+    else if (date != undefined) {
+        await editPublication(name, date);
+    }
+    else if (type != undefined) {
+        await editType(name, type);
+    }
+    else if (cutaway != undefined) {
+        if (cutaway == "yes") {
+            await editCutaway(name, true);
+        }
+        else {
+            await editCutaway(name, false);
+        }
+    };
 
+    guitar = await getGuitars();
+    series = await getSeries();
+    
+    const guitarDetail = guitar.filter((guitar) => {
+        return guitar.name === name;
+    });
+
+    res.render("guitarDetails", { guitars: guitarDetail});
+})
 
 
 app.listen(app.get("port"), async() => {
-    series = await getData(seriesUrl);
-    guitar = await getData(guitarUrl);
+    await connect();
+    guitar = await getGuitars();
+    series = await getSeries();
     console.log("Server started on http://localhost:" + app.get('port'));
 });

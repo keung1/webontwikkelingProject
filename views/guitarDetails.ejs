@@ -11,14 +11,74 @@
             <ul>
                 <li><span class = "detail">Beschrijving:</span><br><br>
                     <%- guitar.description %></li>
-                <li><span class = "detail">Prijs:</span> <%- guitar.price %></li>
-                <li><span class = "detail">Eerste publicatie:</span> <%- guitar.releaseDate %></li>
-                <li><span class = "detail">Type:</span> <%- guitar.guitarType %></li>
-                <li><span class = "detail">Materialen:</span> <%- guitar.materials %></li>
-                <li><span class = "detail">Cutaway:</span> <%- guitar.cutaway %></li>
-                <li><span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- guitar.series %></a></li>
+                <li>
+                    <span class = "detail">Prijs:</span> <%- guitar.price %>
+                    <button class = "edit">edit</button>
+                </li>
+                <li>
+                    <span class = "detail">Eerste publicatie:</span> <%- guitar.releaseDate %>
+                    <button class = "edit">edit</button>
+                </li>
+                <li>
+                    <span class = "detail">Type:</span> <%- guitar.guitarType %>
+                    <button class = "edit">edit</button>
+                </li>
+                <li>
+                    <span class = "detail">Materialen:</span> <%- guitar.materials %>
+                </li>
+                <li>
+                    <span class = "detail">Cutaway:</span> 
+                    <% if (String(guitar.cutaway) == "true") { %>
+                        ja
+                    <% } %>
+                    <% if (String(guitar.cutaway) == "false") { %>
+                        neen
+                    <% } %>
+                    <button class = "edit">edit</button>
+                </li>
+                <li>
+                    <span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- guitar.series %></a>
+                </li>
             </ul>
         </section>
     </div>
+    <section class = "form_container">
+        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+            <label for="username">Prijs:</label>
+            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
+            <input type="text" name="price" placeholder="prijs" required><br>
+            <input class = "save" type = "submit" value="save">
+        </form>
+    </section>
+    <section class = "form_container">
+        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+            <label for="username">Publicatie:</label>
+            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
+            <input type="text" name="publication" placeholder="publicatie" required><br>
+            <input class = "save" type = "submit" value="save">
+        </form>
+    </section>
+    <section class = "form_container">
+        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+            <label for="username">Type:</label>
+            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
+            <select name = "type">
+                <option value = "acoustic">Akoestisch</option>
+                <option value = "electric">Elektrisch</option>
+            </select>
+            <input class = "save" type = "submit" value="save">
+        </form>
+    </section>
+    <section class = "form_container">
+        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+            <label for="username">Cutaway:</label>
+            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
+            <select name = "cutaway">
+                <option value = "yes">Ja</option>
+                <option value = "no">Nee</option>
+            </select>
+            <input class = "save" type = "submit" value="save">
+        </form>
+    </section>
     <% } %>
 </main>
