@@ -24,7 +24,7 @@ export interface Series {
 
 export interface User {
     _id?: ObjectId,
-    username: string,
+    username?: string,
     password?: string,
     role: "USER" | "ADMIN"
 }

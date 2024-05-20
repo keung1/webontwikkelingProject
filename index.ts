@@ -1,5 +1,8 @@
 import {Guitar, Series, User} from "./interfaces";
 import express, { Express } from "express";
+import session from "express-session";
+import { secureMiddleware } from "./middleware/secureMiddleware";
+import bcrypt from "bcrypt";
 import ejs from "ejs";
 import { connect, getGuitars, getSeries, editPrice, editCutaway, editPublication, editType, login, register } from "./database";
 import dontenv from "dotenv"
@@ -10,7 +13,10 @@ app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(session)
+app.use(secureMiddleware)
 
+const saltRounds: number = 10
 let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
 let seriesUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitarSeries.json';
 
@@ -23,6 +29,9 @@ let guitar: Guitar[] = [];
 let series: Series[] = [];
 
 app.get("/", (req, res) => {
+    if (req.session.user) {
+        res.redirect("/guitar");
+    }
     res.render("login");
 });
 
@@ -44,6 +53,18 @@ app.post("/", async(req, res) => {
 app.get("/register", (req, res) => {
     res.render("register");
 });
+
+app.post("register", async (req, res) => {
+    const username_signin: string = req.body.username_signin;
+    const password_signin: string = req.body.password_signin;
+    try {
+        let hashedPassword: string = await bcrypt.hash(password_signin, saltRounds);
+        await register(username_signin, hashedPassword);
+        res.redirect("/guitar");
+    } catch {
+        res.redirect("/");
+    }
+})
 
 app.post("/logout", async(req, res) => {
     req.session.destroy(() =>{
@@ -95,7 +116,8 @@ app.get("/guitar", (req, res) => {
         sortDirections: sortDirections,
         sortField: sortField,
         sortDirection: sortDirection,
-        q: q
+        q: q,
+        role: req.session.user?.role
     });
 });
 
@@ -151,7 +173,10 @@ app.get("/:guitarDetail", (req, res) => {
         return ":" + guitar.name === detail;
     });
 
-    res.render("guitarDetails", { guitars: guitarDetail});
+    res.render("guitarDetails", { 
+        guitars: guitarDetail,
+        role: req.session.user?.role
+    });
 });
 
 app.post("/:guitarDetail", async (req, res) => {
@@ -185,8 +210,11 @@ app.post("/:guitarDetail", async (req, res) => {
         return guitar.name === name;
     });
 
-    res.render("guitarDetails", { guitars: guitarDetail});
-})
+    res.render("guitarDetails", { 
+        guitars: guitarDetail,
+        role: req.session.user?.role
+    });
+});
 
 
 app.listen(app.get("port"), async() => {

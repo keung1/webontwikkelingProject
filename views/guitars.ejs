@@ -24,6 +24,9 @@
                     </th>
                 <% } %>
             <% } %>
+                    <th>
+                        action
+                    </th>
         </tr>
         <% for (let guitar of guitars) { %>
         <tr>
@@ -36,6 +39,10 @@
             <% } %>
             <% if (String(guitar.cutaway) == "false") { %>
                 <td>neen</td>
+            <% } %>
+            <td><a href = "/:<%= guitar.name %>">View</a></td>
+            <% if(role == "ADMIN") { %>
+                <td><a href = "/:<%= guitar.name %>">Edit</a></td>
             <% } %>
         </tr>
         <% } %>

@@ -1,0 +1,14 @@
+<%- include("header) %>
+
+<main>
+    <form action="/" method="post" id = "signin">
+        <h3>Registratie</h3>
+        <fieldset>
+            <label for="username">Gebruikersnaam:</label>
+            <input type="text" name="username_signin" placeholder="Gebruikersnaam" required><br>
+            <label for="password">Wachtwoord:</label>
+            <input type="password" name="password_signin" placeholder="Wachtwoord" id = "password" required><br>
+        </fieldset>    
+        <input id = "signin_button" type="submit" form = "signin_content" value="Registreren">           
+    </form>
+</main>

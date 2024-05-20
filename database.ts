@@ -9,6 +9,7 @@ export const guitarCollection : Collection<Guitar> = client.db("guitarDB").colle
 export const seriesCollection : Collection<Series> = client.db("guitarDB").collection<Series>("series");
 export const userCollection : Collection<User> = client.db("guitarDB").collection<User>("users");
 
+const saltRounds: number = 10;
 let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
 let seriesUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitarSeries.json';
 
@@ -36,12 +37,36 @@ async function seed() {
     }
 }
 
-export async function register(name: string, password: string) {
+async function createFirstUsers() {
+    if (await userCollection.countDocuments() > 0) {
+        return;
+    }
+    let usernameAdmin: string | undefined = process.env.USER_ADMIN;
+    let passwordAdmin: string | undefined = process.env.USER_PASSWORD;
     await userCollection.insertOne({
-        username: name,
-        password: password,
+        username: usernameAdmin,
+        password: await bcrypt.hash(passwordAdmin!, saltRounds),
+        role: "ADMIN"
+    });
+
+    let username: string | undefined = process.env.USER;
+    let password: string | undefined = process.env.PASSWORD;
+    await userCollection.insertOne({
+        username: username,
+        password: await bcrypt.hash(password!, saltRounds),
         role: "USER"
     });
+}
+
+export async function register(name: string, password: string) {
+    let result: User | null = await userCollection.findOne<User>({username: name});
+    if (!result) {
+        await userCollection.insertOne({
+            username: name,
+            password: password,
+            role: "USER"
+        });
+    }
 }
 
 export async function login(name: string, password: string) {
@@ -85,6 +110,7 @@ export async function connect() {
         await client.connect();
         console.log("Connected to database");
         await seed();
+        await createFirstUsers();
         process.on("SIGINT", exit);
     } catch (error) {
         console.error(error);
