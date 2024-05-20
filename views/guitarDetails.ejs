@@ -13,15 +13,21 @@
                     <%- guitar.description %></li>
                 <li>
                     <span class = "detail">Prijs:</span> <%- guitar.price %>
+                    <% if(role == "ADMIN") { %>
                     <button class = "edit">edit</button>
+                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Eerste publicatie:</span> <%- guitar.releaseDate %>
+                    <% if(role == "ADMIN") { %>
                     <button class = "edit">edit</button>
+                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Type:</span> <%- guitar.guitarType %>
+                    <% if(role == "ADMIN") { %>
                     <button class = "edit">edit</button>
+                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Materialen:</span> <%- guitar.materials %>
@@ -34,7 +40,9 @@
                     <% if (String(guitar.cutaway) == "false") { %>
                         neen
                     <% } %>
+                    <% if(role == "ADMIN") { %>
                     <button class = "edit">edit</button>
+                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- guitar.series %></a>

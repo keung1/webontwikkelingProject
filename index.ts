@@ -1,6 +1,6 @@
 import {Guitar, Series, User} from "./interfaces";
 import express, { Express } from "express";
-import session from "express-session";
+import session from "./session";
 import { secureMiddleware } from "./middleware/secureMiddleware";
 import bcrypt from "bcrypt";
 import ejs from "ejs";
@@ -14,7 +14,6 @@ app.set("port", process.env.PORT || 3000);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(session)
-app.use(secureMiddleware)
 
 const saltRounds: number = 10
 let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
@@ -28,11 +27,10 @@ async function getData(url: string) {
 let guitar: Guitar[] = [];
 let series: Series[] = [];
 
-app.get("/", (req, res) => {
-    if (req.session.user) {
-        res.redirect("/guitar");
-    }
-    res.render("login");
+app.get("/", async(req, res) => {
+    res.render("login", {
+        user: req.session.user
+    });
 });
 
 app.post("/", async(req, res) => {
@@ -46,33 +44,35 @@ app.post("/", async(req, res) => {
             res.redirect("/guitar");
         }
     } catch (e: any) {
-        res.redirect("/");
+        res.render("/");
     }
 })
 
-app.get("/register", (req, res) => {
-    res.render("register");
+app.get("/register", async(req, res) => {
+    res.render("register", {
+        user: req.session.user
+    });
 });
 
-app.post("register", async (req, res) => {
+app.post("/register", async (req, res) => {
     const username_signin: string = req.body.username_signin;
     const password_signin: string = req.body.password_signin;
     try {
         let hashedPassword: string = await bcrypt.hash(password_signin, saltRounds);
         await register(username_signin, hashedPassword);
-        res.redirect("/guitar");
+        res.render("/");
     } catch {
-        res.redirect("/");
+        res.render("/register");       
     }
 })
 
-app.post("/logout", async(req, res) => {
+app.post("/logout",secureMiddleware , async(req, res) => {
     req.session.destroy(() =>{
         res.redirect("/");
     });
 });
 
-app.get("/guitar", (req, res) => {
+app.get("/guitar", secureMiddleware, async(req, res) => {
     const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
     const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
     let sortedGuitars = [...guitar].sort((a, b) => {
@@ -117,11 +117,12 @@ app.get("/guitar", (req, res) => {
         sortField: sortField,
         sortDirection: sortDirection,
         q: q,
-        role: req.session.user?.role
+        role: req.session.user?.role,
+        user: req.session.user
     });
 });
 
-app.get("/series", (req, res) => {
+app.get("/series", secureMiddleware, async(req, res) => {
     const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
     const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
     let sortedSeries = [...series].sort((a, b) => {
@@ -155,11 +156,12 @@ app.get("/series", (req, res) => {
         sortFields: sortFields,
         sortDirections: sortDirections,
         sortField: sortField,
-        sortDirection: sortDirection
+        sortDirection: sortDirection,
+        user: req.session.user
     });
 });
 
-app.get("/series/:seriesDetail", (req, res) => {
+app.get("/series/:seriesDetail", secureMiddleware, async(req, res) => {
     const detail = req.params.seriesDetail;
     const seriesDetail = series.filter((series) => {
         return ":" + series.name === detail;
@@ -179,7 +181,7 @@ app.get("/:guitarDetail", (req, res) => {
     });
 });
 
-app.post("/:guitarDetail", async (req, res) => {
+app.post("/:guitarDetail", secureMiddleware, async (req, res) => {
     const name: string = req.body.name;
     const price: string = req.body.price;
     const date: string = req.body.publication;

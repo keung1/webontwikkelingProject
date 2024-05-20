@@ -6,6 +6,6 @@ export function secureMiddleware(req: Request, res: Response, next: NextFunction
         next();
     }
     else {
-        res.redirect("/")
+        res.render("login")
     }
 }

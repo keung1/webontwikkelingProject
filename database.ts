@@ -2,7 +2,8 @@ import { Collection, MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import { Guitar, Series, User } from "./interfaces";
 import bcrypt from "bcrypt";
-dotenv.config();
+
+require('dotenv').config()
 
 export const client = new MongoClient(process.env.MONGO_URI || "mongodb://localhost:27017");
 export const guitarCollection : Collection<Guitar> = client.db("guitarDB").collection<Guitar>("guitars");
@@ -38,22 +39,29 @@ async function seed() {
 }
 
 async function createFirstUsers() {
+    await userCollection.deleteMany({ });
     if (await userCollection.countDocuments() > 0) {
         return;
     }
     let usernameAdmin: string | undefined = process.env.USER_ADMIN;
-    let passwordAdmin: string | undefined = process.env.USER_PASSWORD;
+    let passwordAdmin: string | undefined = process.env.PASSWORD_ADMIN;
+    if (usernameAdmin == undefined || passwordAdmin == undefined) {
+        throw new Error(".env admin");
+    }
     await userCollection.insertOne({
         username: usernameAdmin,
-        password: await bcrypt.hash(passwordAdmin!, saltRounds),
+        password: await bcrypt.hash(passwordAdmin, saltRounds),
         role: "ADMIN"
     });
 
     let username: string | undefined = process.env.USER;
     let password: string | undefined = process.env.PASSWORD;
+    if (username == undefined || password == undefined) {
+        throw new Error(".env user");
+    }
     await userCollection.insertOne({
         username: username,
-        password: await bcrypt.hash(password!, saltRounds),
+        password: await bcrypt.hash(password, saltRounds),
         role: "USER"
     });
 }
@@ -63,7 +71,7 @@ export async function register(name: string, password: string) {
     if (!result) {
         await userCollection.insertOne({
             username: name,
-            password: password,
+            password: await bcrypt.hash(password, saltRounds),
             role: "USER"
         });
     }
