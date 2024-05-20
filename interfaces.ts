@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb"
+
 export interface Guitar {
     id: string,
     name: string,
@@ -18,4 +20,11 @@ export interface Series {
     firstAppearance: number,
     creator: string,
     image: string
+}
+
+export interface User {
+    _id?: ObjectId,
+    username: string,
+    password?: string,
+    role: "USER" | "ADMIN"
 }

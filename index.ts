@@ -1,7 +1,7 @@
-import {Guitar, Series} from "./interfaces";
+import {Guitar, Series, User} from "./interfaces";
 import express, { Express } from "express";
 import ejs from "ejs";
-import { connect, getGuitars, getSeries, editPrice, editCutaway, editPublication, editType } from "./database";
+import { connect, getGuitars, getSeries, editPrice, editCutaway, editPublication, editType, login, register } from "./database";
 import dontenv from "dotenv"
 
 const app : Express = express();
@@ -23,6 +23,35 @@ let guitar: Guitar[] = [];
 let series: Series[] = [];
 
 app.get("/", (req, res) => {
+    res.render("login");
+});
+
+app.post("/", async(req, res) => {
+    const username: string = req.body.username;
+    const password: string = req.body.password;
+    try {
+        let user: User | undefined =  await login(username, password);
+        if (user) {
+            delete user.password;
+            req.session.user = user;
+            res.redirect("/guitar");
+        }
+    } catch (e: any) {
+        res.redirect("/");
+    }
+})
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+app.post("/logout", async(req, res) => {
+    req.session.destroy(() =>{
+        res.redirect("/");
+    });
+});
+
+app.get("/guitar", (req, res) => {
     const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
     const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
     let sortedGuitars = [...guitar].sort((a, b) => {

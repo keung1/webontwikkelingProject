@@ -1,11 +1,13 @@
 import { Collection, MongoClient } from "mongodb";
 import dotenv from "dotenv";
-import { Guitar, Series } from "./interfaces";
+import { Guitar, Series, User } from "./interfaces";
+import bcrypt from "bcrypt";
 dotenv.config();
 
 export const client = new MongoClient(process.env.MONGO_URI || "mongodb://localhost:27017");
 export const guitarCollection : Collection<Guitar> = client.db("guitarDB").collection<Guitar>("guitars");
 export const seriesCollection : Collection<Series> = client.db("guitarDB").collection<Series>("series");
+export const userCollection : Collection<User> = client.db("guitarDB").collection<User>("users");
 
 let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
 let seriesUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitarSeries.json';
@@ -31,6 +33,26 @@ async function seed() {
         let series: Series[] = await getUrl(seriesUrl);
         await guitarCollection.insertMany(guitar);
         await seriesCollection.insertMany(series);
+    }
+}
+
+export async function register(name: string, password: string) {
+    await userCollection.insertOne({
+        username: name,
+        password: password,
+        role: "USER"
+    });
+}
+
+export async function login(name: string, password: string) {
+    let result: User | null = await userCollection.findOne<User>({username: name});
+    if (result) {
+        if (await bcrypt.compare(password, result.password!)) {
+            return result;
+        }
+        else {
+            throw new Error("foute inlog gegevens");
+        }
     }
 }
 
