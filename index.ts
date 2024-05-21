@@ -27,13 +27,14 @@ async function getData(url: string) {
 let guitar: Guitar[] = [];
 let series: Series[] = [];
 
-app.get("/", async(req, res) => {
+app.get("/", (req, res) => {
     res.render("login", {
         user: req.session.user
     });
 });
 
 app.post("/", async(req, res) => {
+    console.log("yo");
     const username: string = req.body.username;
     const password: string = req.body.password;
     try {
@@ -44,11 +45,12 @@ app.post("/", async(req, res) => {
             res.redirect("/guitar");
         }
     } catch (e: any) {
-        res.render("/");
+        console.log("yo");
+        res.redirect("/");
     }
 })
 
-app.get("/register", async(req, res) => {
+app.get("/register", (req, res) => {
     res.render("register", {
         user: req.session.user
     });
@@ -60,9 +62,9 @@ app.post("/register", async (req, res) => {
     try {
         let hashedPassword: string = await bcrypt.hash(password_signin, saltRounds);
         await register(username_signin, hashedPassword);
-        res.render("/");
+        res.redirect("/");
     } catch {
-        res.render("/register");       
+        res.redirect("/register");       
     }
 })
 
@@ -118,7 +120,7 @@ app.get("/guitar", secureMiddleware, async(req, res) => {
         sortDirection: sortDirection,
         q: q,
         role: req.session.user?.role,
-        user: req.session.user
+        user: true
     });
 });
 
@@ -157,7 +159,7 @@ app.get("/series", secureMiddleware, async(req, res) => {
         sortDirections: sortDirections,
         sortField: sortField,
         sortDirection: sortDirection,
-        user: req.session.user
+        user: true
     });
 });
 
@@ -177,7 +179,8 @@ app.get("/:guitarDetail", (req, res) => {
 
     res.render("guitarDetails", { 
         guitars: guitarDetail,
-        role: req.session.user?.role
+        role: req.session.user?.role,
+        user: req.session.user
     });
 });
 
@@ -214,7 +217,8 @@ app.post("/:guitarDetail", secureMiddleware, async (req, res) => {
 
     res.render("guitarDetails", { 
         guitars: guitarDetail,
-        role: req.session.user?.role
+        role: req.session.user?.role,
+        user: req.session.user
     });
 });
 

@@ -44,7 +44,9 @@ async function createFirstUsers() {
         return;
     }
     let usernameAdmin: string | undefined = process.env.USER_ADMIN;
+    console.log(usernameAdmin);
     let passwordAdmin: string | undefined = process.env.PASSWORD_ADMIN;
+    console.log(passwordAdmin);
     if (usernameAdmin == undefined || passwordAdmin == undefined) {
         throw new Error(".env admin");
     }
@@ -54,8 +56,10 @@ async function createFirstUsers() {
         role: "ADMIN"
     });
 
-    let username: string | undefined = process.env.USER;
+    let username: string | undefined = process.env.USERNAME;
+    console.log(username);
     let password: string | undefined = process.env.PASSWORD;
+    console.log(password);
     if (username == undefined || password == undefined) {
         throw new Error(".env user");
     }
@@ -79,6 +83,7 @@ export async function register(name: string, password: string) {
 
 export async function login(name: string, password: string) {
     let result: User | null = await userCollection.findOne<User>({username: name});
+    console.log(result);
     if (result) {
         if (await bcrypt.compare(password, result.password!)) {
             return result;
