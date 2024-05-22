@@ -2,7 +2,7 @@
 
 <main>
     <h1>Gitaren</h1>
-    <form action = "/" method = "get">
+    <form action = "/guitar" method = "get">
         <label for = "search"></label>
         <input type = "text" id = "search" name = "q" value = "<%= q%>">
         <button type = "submit">Search</button>
@@ -30,7 +30,7 @@
         </tr>
         <% for (let guitar of guitars) { %>
         <tr>
-            <td><a href = "/:<%= guitar.name %>"><%- guitar.name %></a></td>
+            <td><a href = "/guitar/:<%= guitar.name %>"><%- guitar.name %></a></td>
             <td><%- guitar.price %></td>
             <td><%- guitar.materials %></td>
             <td><%- guitar.guitarType %></td>
@@ -40,10 +40,12 @@
             <% if (String(guitar.cutaway) == "false") { %>
                 <td>neen</td>
             <% } %>
-            <td><a href = "/:<%= guitar.name %>">View</a></td>
-            <% if(role == "ADMIN") { %>
-                <td><a href = "/:<%= guitar.name %>">Edit</a></td>
-            <% } %>
+            <td>
+                <a href = "/guitar/:<%= guitar.name %>">View</a>
+                <% if(role == "ADMIN") { %>
+                    <a href = "/guitar/:<%= guitar.name %>">Edit</a>
+                <% } %>
+            </td>
         </tr>
         <% } %>
     </table>

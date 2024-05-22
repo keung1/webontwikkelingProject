@@ -30,6 +30,7 @@ async function exit() {
 }
 
 async function seed() {
+    guitarCollection.deleteMany({});
     if(await guitarCollection.countDocuments() == 0) {
         let guitar: Guitar[] = await getUrl(guitarUrl);
         let series: Series[] = await getUrl(seriesUrl);
@@ -85,11 +86,13 @@ export async function login(name: string, password: string) {
     let result: User | null = await userCollection.findOne<User>({username: name});
     console.log(result);
     if (result) {
+        console.log(await bcrypt.compare(password, result.password!))
+        console.log(result.password?.length);
         if (await bcrypt.compare(password, result.password!)) {
             return result;
         }
         else {
-            throw new Error("foute inlog gegevens");
+            throw new Error("login fail");
         }
     }
 }

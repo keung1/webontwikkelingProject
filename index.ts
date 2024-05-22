@@ -34,7 +34,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", async(req, res) => {
-    console.log("yo");
     const username: string = req.body.username;
     const password: string = req.body.password;
     try {
@@ -45,10 +44,9 @@ app.post("/", async(req, res) => {
             res.redirect("/guitar");
         }
     } catch (e: any) {
-        console.log("yo");
         res.redirect("/");
     }
-})
+});
 
 app.get("/register", (req, res) => {
     res.render("register", {
@@ -60,16 +58,15 @@ app.post("/register", async (req, res) => {
     const username_signin: string = req.body.username_signin;
     const password_signin: string = req.body.password_signin;
     try {
-        let hashedPassword: string = await bcrypt.hash(password_signin, saltRounds);
-        await register(username_signin, hashedPassword);
+        await register(username_signin, password_signin);
         res.redirect("/");
     } catch {
         res.redirect("/register");       
     }
-})
+});
 
-app.post("/logout",secureMiddleware , async(req, res) => {
-    req.session.destroy(() =>{
+app.get("/logout",secureMiddleware , async(req, res) => {
+    req.session.destroy((err) =>{
         res.redirect("/");
     });
 });
@@ -171,7 +168,7 @@ app.get("/series/:seriesDetail", secureMiddleware, async(req, res) => {
     res.render("serieDetails", { series: seriesDetail});
 });
 
-app.get("/:guitarDetail", (req, res) => {
+app.get("/guitar/:guitarDetail", (req, res) => {
     const detail = req.params.guitarDetail;
     const guitarDetail = guitar.filter((guitar) => {
         return ":" + guitar.name === detail;
@@ -184,7 +181,7 @@ app.get("/:guitarDetail", (req, res) => {
     });
 });
 
-app.post("/:guitarDetail", secureMiddleware, async (req, res) => {
+app.post("/guitar/:guitarDetail", secureMiddleware, async (req, res) => {
     const name: string = req.body.name;
     const price: string = req.body.price;
     const date: string = req.body.publication;
