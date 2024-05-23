@@ -10,7 +10,7 @@ export interface Guitar {
     image: string,
     guitarType: string,
     materials: string[],
-    series: Series
+    series: string
 }
 
 export interface Series {

@@ -28,9 +28,14 @@ let guitar: Guitar[] = [];
 let series: Series[] = [];
 
 app.get("/", (req, res) => {
-    res.render("login", {
-        user: req.session.user
-    });
+    if (req.session.user) {
+        res.redirect("/guitar");
+    }
+    else {
+        res.render("login", {
+            user: req.session.user
+        });
+    }
 });
 
 app.post("/", async(req, res) => {
@@ -170,12 +175,17 @@ app.get("/series/:seriesDetail", secureMiddleware, async(req, res) => {
 
 app.get("/guitar/:guitarDetail", (req, res) => {
     const detail = req.params.guitarDetail;
-    const guitarDetail = guitar.filter((guitar) => {
+    const guitarDetail: Guitar[] = guitar.filter((guitar) => {
         return ":" + guitar.name === detail;
+    });
+
+    const serie: Series | undefined = series.find((series) => {
+        return series.id === guitarDetail[0].series
     });
 
     res.render("guitarDetails", { 
         guitars: guitarDetail,
+        series: serie,
         role: req.session.user?.role,
         user: req.session.user
     });
@@ -212,8 +222,13 @@ app.post("/guitar/:guitarDetail", secureMiddleware, async (req, res) => {
         return guitar.name === name;
     });
 
+    const serie: Series | undefined = series.find((series) => {
+        return series.id === guitarDetail[0].series
+    });
+
     res.render("guitarDetails", { 
         guitars: guitarDetail,
+        series: serie,
         role: req.session.user?.role,
         user: req.session.user
     });

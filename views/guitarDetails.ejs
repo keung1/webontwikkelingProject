@@ -45,13 +45,13 @@
                     <% } %>
                 </li>
                 <li>
-                    <span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- guitar.series %></a>
+                    <span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- series.name %></a>
                 </li>
             </ul>
         </section>
     </div>
     <section class = "form_container">
-        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
             <label for="username">Prijs:</label>
             <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
             <input type="text" name="price" placeholder="prijs" required><br>
@@ -59,7 +59,7 @@
         </form>
     </section>
     <section class = "form_container">
-        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
             <label for="username">Publicatie:</label>
             <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
             <input type="text" name="publication" placeholder="publicatie" required><br>
@@ -67,7 +67,7 @@
         </form>
     </section>
     <section class = "form_container">
-        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
             <label for="username">Type:</label>
             <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
             <select name = "type">
@@ -78,7 +78,7 @@
         </form>
     </section>
     <section class = "form_container">
-        <form class = "form_content" action = "/:<%= guitars.name%>" method = "post">
+        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
             <label for="username">Cutaway:</label>
             <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
             <select name = "cutaway">
