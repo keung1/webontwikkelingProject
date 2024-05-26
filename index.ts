@@ -18,13 +18,6 @@ app.use(session);
 app.use(flashMiddleware)
 
 const saltRounds: number = 10
-let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
-let seriesUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitarSeries.json';
-
-async function getData(url: string) {
-    const response = await fetch(url);
-    return await response.json();
-}
 
 let guitar: Guitar[] = [];
 let series: Series[] = [];
