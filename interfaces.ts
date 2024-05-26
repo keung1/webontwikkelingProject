@@ -28,3 +28,8 @@ export interface User {
     password?: string,
     role: "USER" | "ADMIN"
 }
+
+export interface FlashMessage {
+    type: "error" | 'succes',
+    message: string
+}

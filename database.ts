@@ -68,14 +68,15 @@ async function createFirstUsers() {
 }
 
 export async function register(name: string, password: string) {
-    let result: User | null = await userCollection.findOne<User>({username: name});
-    if (!result) {
         await userCollection.insertOne({
             username: name,
             password: await bcrypt.hash(password, saltRounds),
             role: "USER"
         });
-    }
+}
+
+export async function checkForUser(name: string) {
+    return await userCollection.findOne({username: name});
 }
 
 export async function login(name: string, password: string) {

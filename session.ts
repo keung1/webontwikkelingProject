@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { User } from "./interfaces";
+import { User, FlashMessage } from "./interfaces";
 dotenv.config();
 import session from "express-session";
 import mongoDbSession from "connect-mongodb-session"
@@ -19,6 +19,7 @@ mongoStore.on("error", (error) => {
 declare module 'express-session' {
     export interface SessionData {
         user?: User;
+        message?: FlashMessage;
     }
 }
 

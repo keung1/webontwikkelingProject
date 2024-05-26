@@ -2,9 +2,10 @@ import {Guitar, Series, User} from "./interfaces";
 import express, { Express } from "express";
 import session from "./session";
 import { secureMiddleware } from "./middleware/secureMiddleware";
+import { flashMiddleware } from "./middleware/flashMiddleware";
 import bcrypt from "bcrypt";
 import ejs from "ejs";
-import { connect, getGuitars, getSeries, editPrice, editCutaway, editPublication, editType, login, register } from "./database";
+import { connect, getGuitars, getSeries, editPrice, editCutaway, editPublication, editType, login, register, checkForUser } from "./database";
 import dontenv from "dotenv"
 
 const app : Express = express();
@@ -13,7 +14,8 @@ app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
-app.use(session)
+app.use(session);
+app.use(flashMiddleware)
 
 const saltRounds: number = 10
 let guitarUrl: string = 'https://raw.githubusercontent.com/keung1/webontwikkelingProjectJson/master/guitars.json';
@@ -63,8 +65,13 @@ app.post("/register", async (req, res) => {
     const username_signin: string = req.body.username_signin;
     const password_signin: string = req.body.password_signin;
     try {
-        await register(username_signin, password_signin);
-        res.redirect("/");
+        if(await checkForUser(username_signin)) {
+            req.session.message = {type: "error", message: `Deze gebruiker bestaat al`};
+            res.redirect("/register")
+        } else {
+            await register(username_signin, password_signin);
+            res.redirect("/");
+        }
     } catch {
         res.redirect("/register");       
     }

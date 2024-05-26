@@ -11,4 +11,7 @@
         </fieldset>    
         <input id = "signin_button" type="submit" value="Registreren">           
     </form>
+    <% if(message) { %>
+        <p class = "<%= message.type %>"><%= message.message %></p>
+    <% } %>
 </main>
