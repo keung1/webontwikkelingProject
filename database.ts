@@ -30,8 +30,6 @@ async function exit() {
 }
 
 async function seed() {
-    guitarCollection.deleteMany({});
-    seriesCollection.deleteMany({});
     if(await guitarCollection.countDocuments() == 0 ) {
         let guitar: Guitar[] = await getUrl(guitarUrl);
         await guitarCollection.insertMany(guitar);
@@ -43,7 +41,6 @@ async function seed() {
 }
 
 async function createFirstUsers() {
-    await userCollection.deleteMany({ });
     if (await userCollection.countDocuments() > 0) {
         return;
     }
