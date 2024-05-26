@@ -31,10 +31,13 @@ async function exit() {
 
 async function seed() {
     guitarCollection.deleteMany({});
-    if(await guitarCollection.countDocuments() == 0) {
+    seriesCollection.deleteMany({});
+    if(await guitarCollection.countDocuments() == 0 ) {
         let guitar: Guitar[] = await getUrl(guitarUrl);
-        let series: Series[] = await getUrl(seriesUrl);
         await guitarCollection.insertMany(guitar);
+    }
+    if(await seriesCollection.countDocuments() == 0 ) {
+        let series: Series[] = await getUrl(seriesUrl);
         await seriesCollection.insertMany(series);
     }
 }

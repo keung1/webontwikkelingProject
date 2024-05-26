@@ -126,6 +126,35 @@ app.get("/guitar", secureMiddleware, async(req, res) => {
     });
 });
 
+app.post("/guitar", secureMiddleware, async (req, res) => {
+    const name: string = req.body.name;
+    const price: string = req.body.price;
+    const date: string = req.body.publication;
+    const type: string = req.body.type;
+    const cutaway: string = req.body.cutaway;
+    if (price != "" && price != undefined) {
+        await editPrice(name, price);
+    }
+    if (date != "" && date != undefined) {
+        await editPublication(name, date);
+    }
+    if (type != undefined) {
+        await editType(name, type);
+    }
+    if (cutaway != undefined) {
+        if (cutaway == "yes") {
+            await editCutaway(name, true);
+        }
+        else {
+            await editCutaway(name, false);
+        }
+    };
+
+    guitar = await getGuitars();
+
+    res.redirect("/guitar");
+});
+
 app.get("/series", secureMiddleware, async(req, res) => {
     const sortField = typeof req.query.sortField === "string" ? req.query.sortField : "name";
     const sortDirection = typeof req.query.sortDirection === "string" ? req.query.sortDirection : "asc";
@@ -166,17 +195,17 @@ app.get("/series", secureMiddleware, async(req, res) => {
 });
 
 app.get("/series/:seriesDetail", secureMiddleware, async(req, res) => {
-    const detail = req.params.seriesDetail;
-    const seriesDetail = series.filter((series) => {
-        return ":" + series.name === detail;
+    const detail: string = req.params.seriesDetail;
+    const seriesDetail: Series[] = series.filter((series) => {
+        return  series.id === detail;
     });
-    res.render("serieDetails", { series: seriesDetail});
+    res.render("serieDetails", { series: seriesDetail[0]});
 });
 
 app.get("/guitar/:guitarDetail", (req, res) => {
-    const detail = req.params.guitarDetail;
+    const detail: string = req.params.guitarDetail;
     const guitarDetail: Guitar[] = guitar.filter((guitar) => {
-        return ":" + guitar.name === detail;
+        return guitar.name === detail;
     });
 
     const serie: Series | undefined = series.find((series) => {
@@ -190,50 +219,6 @@ app.get("/guitar/:guitarDetail", (req, res) => {
         user: req.session.user
     });
 });
-
-app.post("/guitar/:guitarDetail", secureMiddleware, async (req, res) => {
-    const name: string = req.body.name;
-    const price: string = req.body.price;
-    const date: string = req.body.publication;
-    const type: string = req.body.type;
-    const cutaway: string = req.body.cutaway;
-    if (price != undefined) {
-        await editPrice(name, price);
-    }
-    else if (date != undefined) {
-        await editPublication(name, date);
-    }
-    else if (type != undefined) {
-        await editType(name, type);
-    }
-    else if (cutaway != undefined) {
-        if (cutaway == "yes") {
-            await editCutaway(name, true);
-        }
-        else {
-            await editCutaway(name, false);
-        }
-    };
-
-    guitar = await getGuitars();
-    series = await getSeries();
-    
-    const guitarDetail = guitar.filter((guitar) => {
-        return guitar.name === name;
-    });
-
-    const serie: Series | undefined = series.find((series) => {
-        return series.id === guitarDetail[0].series
-    });
-
-    res.render("guitarDetails", { 
-        guitars: guitarDetail,
-        series: serie,
-        role: req.session.user?.role,
-        user: req.session.user
-    });
-});
-
 
 app.listen(app.get("port"), async() => {
     await connect();

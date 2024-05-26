@@ -1,19 +1,17 @@
 <%- include("header") %>
 
 <main class = "series_main">
-    <% for (let serie of series) { %>
-    <h2><%- serie.name %></h2>
+    <h2><%= series.name %></h2>
     <div id = "series_container">
         <figure>
-            <img class = "seriesImage" src = "<%= serie.image %>" width= "755" height= "425">
+            <img class = "seriesImage" src = "<%= series.image %>" width= "755" height= "425">
         </figure>
         <section class = "details">
             <ul>
-                <li><span class = "detail">Voorraad:</span> <%- serie.amount %></li>
-                <li><span class = "detail">Jaar:</span> <%- serie.firstAppearance %></li>
-                <li><span class = "detail">Luthier:</span> <%- serie.creator %></li>
+                <li><span class = "detail">Voorraad:</span> <%= series.amount %></li>
+                <li><span class = "detail">Jaar:</span> <%= series.firstAppearance %></li>
+                <li><span class = "detail">Luthier:</span> <%= series.creator %></li>
             </ul>
         </section>
     </div>
-    <% } %>
 </main>

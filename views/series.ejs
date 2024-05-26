@@ -17,7 +17,7 @@
         </tr>
         <% for (let serie of series) { %>
         <tr>
-            <td><a href = "/series/:<%= serie.name %>"><%- serie.name %></a></td>
+            <td><a href = "/series/<%= serie.id %>"><%- serie.name %></a></td>
             <td><%- serie.amount %></td>
             <td><%- serie.firstAppearance %></td>
             <td><%- serie.creator %></td>

@@ -30,7 +30,7 @@
         </tr>
         <% for (let guitar of guitars) { %>
         <tr>
-            <td><a href = "/guitar/:<%= guitar.name %>"><%- guitar.name %></a></td>
+            <td><a href = "/guitar/<%= guitar.name %>"><%- guitar.name %></a></td>
             <td><%- guitar.price %></td>
             <td><%- guitar.materials %></td>
             <td><%- guitar.guitarType %></td>
@@ -41,12 +41,34 @@
                 <td>neen</td>
             <% } %>
             <td>
-                <a href = "/guitar/:<%= guitar.name %>">View</a>
+                <a href = "/guitar/<%= guitar.name %>">View</a>
                 <% if(role == "ADMIN") { %>
-                    <a href = "/guitar/:<%= guitar.name %>">Edit</a>
+                    <button class = "edit">Edit</button>
                 <% } %>
             </td>
         </tr>
         <% } %>
     </table>
+    <% for (let guitar of guitars) { %>
+    <section class = "form_container">
+        <form class = "form_content" action = "/guitar" method = "post">
+            <input class = "name" type="text" name="name" value = "<%= guitar.name%>">
+            <label for="price">Prijs:</label>
+            <input type="text" name="price" placeholder="prijs">
+            <label for="publication">Publicatie:</label>
+            <input type="text" name="publication" placeholder="publicatie">
+            <label for="type">Type:</label>
+            <select name = "type">
+                <option value = "akoestisch">akoestisch</option>
+                <option value = "klassiek">klassiek</option>
+            </select>
+            <label for="cutaway">Cutaway:</label>
+            <select name = "cutaway">
+                <option value = "yes">Ja</option>
+                <option value = "no">Nee</option>
+            </select>
+            <input class = "save" type = "submit" value="save">
+        </form>
+    </section>
+    <% } %>
 </main>

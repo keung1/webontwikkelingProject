@@ -13,21 +13,12 @@
                     <%- guitar.description %></li>
                 <li>
                     <span class = "detail">Prijs:</span> <%- guitar.price %>
-                    <% if(role == "ADMIN") { %>
-                    <button class = "edit">edit</button>
-                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Eerste publicatie:</span> <%- guitar.releaseDate %>
-                    <% if(role == "ADMIN") { %>
-                    <button class = "edit">edit</button>
-                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Type:</span> <%- guitar.guitarType %>
-                    <% if(role == "ADMIN") { %>
-                    <button class = "edit">edit</button>
-                    <% } %>
                 </li>
                 <li>
                     <span class = "detail">Materialen:</span> <%- guitar.materials %>
@@ -40,53 +31,12 @@
                     <% if (String(guitar.cutaway) == "false") { %>
                         neen
                     <% } %>
-                    <% if(role == "ADMIN") { %>
-                    <button class = "edit">edit</button>
-                    <% } %>
                 </li>
                 <li>
-                    <span class = "detail">Series:</span> <a href = "/series/:<%= guitar.series %>"><%- series.name %></a>
+                    <span class = "detail">Series:</span> <a href = "/series/<%= guitar.series %>"><%- series.name %></a>
                 </li>
             </ul>
         </section>
     </div>
-    <section class = "form_container">
-        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
-            <label for="username">Prijs:</label>
-            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
-            <input type="text" name="price" placeholder="prijs" required><br>
-            <input class = "save" type = "submit" value="save">
-        </form>
-    </section>
-    <section class = "form_container">
-        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
-            <label for="username">Publicatie:</label>
-            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
-            <input type="text" name="publication" placeholder="publicatie" required><br>
-            <input class = "save" type = "submit" value="save">
-        </form>
-    </section>
-    <section class = "form_container">
-        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
-            <label for="username">Type:</label>
-            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
-            <select name = "type">
-                <option value = "acoustic">Akoestisch</option>
-                <option value = "electric">Elektrisch</option>
-            </select>
-            <input class = "save" type = "submit" value="save">
-        </form>
-    </section>
-    <section class = "form_container">
-        <form class = "form_content" action = "/guitar/:<%= guitars.name%>" method = "post">
-            <label for="username">Cutaway:</label>
-            <input class = "name" type="text" name="name" placeholder="name" value = "<%= guitar.name%>">
-            <select name = "cutaway">
-                <option value = "yes">Ja</option>
-                <option value = "no">Nee</option>
-            </select>
-            <input class = "save" type = "submit" value="save">
-        </form>
-    </section>
     <% } %>
 </main>
